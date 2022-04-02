@@ -1,0 +1,53 @@
+#include <iostream>
+#include <memory>
+
+using namespace std;
+
+struct Complejo{
+    float real, im;
+};
+//Lista enlazada simple, templatizada
+template <typename T, typename K>
+class Elem{
+public:
+    Elem(T const & elem);
+    T getData() const;
+    shared_ptr<Elem<T,K>> getNext() const;
+    shared_ptr<Elem<T,K>> setNext (shared_ptr <Elem <T,K> > n);
+    K getModule() const;
+private:
+    T elem;
+    shared_ptr<Elem<T,K>> next;
+    
+    
+};
+
+template<>
+Complejo Elem<Complejo, Complejo>::getModule()const{
+    return Complejo{elem.real*elem.real, elem.im*elem.im};
+}
+
+template <typename T, typename K>
+Elem<T,K>::Elem(T const & elem): elem{elem}{
+    next = nullptr;
+}
+
+template<typename T, typename K>
+T Elem<T,K>::getData() const
+{
+    return elem;
+}
+
+template<typename T, typename K>
+shared_ptr <Elem<T,K>> Elem<T,K>::getNext() const
+{
+    return next;
+}
+
+template<typename T, typename K>
+shared_ptr< Elem<T,K>> Elem<T,K>::setNext(shared_ptr<Elem<T,K> > n)
+{
+    next = n;
+    return next;
+}
+
