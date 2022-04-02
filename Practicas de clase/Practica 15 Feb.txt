@@ -1,0 +1,47 @@
+#include <iostream>
+#include <memory>
+#include <vector>
+#include <functional>
+#include <string>
+using namespace std;
+
+
+
+struct person{
+  string nombre;
+  int edad;
+  string telefono;
+};
+
+
+shared_ptr<vector<shared_ptr<person>>> filter(vector<shared_ptr<person>> const & p, function<bool(person)>f){ //Funcion filter que devulve un puntero de vectores con vector de punteros
+  shared_ptr<vector<shared_ptr<person>>> p_result = make_shared<vector<shared_ptr<person>>>();
+  for(auto p_elem: p){
+    if(f(*p_elem)) p_result -> push_back(p_elem);
+  }
+  return p_result;
+}
+
+int main() {
+
+vector<shared_ptr<person>> vv; //vector de punteros
+auto p1 = make_shared<person>(person{"Maria", 28, "11111"}); //Añade punteros
+auto p2 = make_shared<person>(person{"Lucia", 8, "22222"});
+auto p3 = make_shared<person>(person{"Lucia", 19, "33333"});
+auto p4 = make_shared<person>(person{"Josemi", 12, "444444"});
+
+vv.push_back(p1); vv.push_back(p2); vv.push_back(p3); vv.push_back(p4); //Añade a la posiscion 1 del vector, 2...,3...,4...
+
+auto yy = filter(vv, [](person p){return p.edad > 18;}); //funcion que filtra los mayores de edad
+
+for(auto p: *yy){ //Muestra los nombres de los mayores de edad
+  cout << p->nombre << "\n";
+}
+
+p1->telefono = "741852963"; //modifica el telefono
+
+for(auto p: *yy){ //muestra el telefono
+  cout << p->telefono << "\n";
+}
+
+}
